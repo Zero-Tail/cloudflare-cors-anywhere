@@ -6,5 +6,5 @@ compatibility_date = "2023-04-17"
 crons = []
 
 [[routes]]
-pattern = "corsproxy.cyou/*"
+pattern = "corsproxy.cyou"
 custom_domain = true
