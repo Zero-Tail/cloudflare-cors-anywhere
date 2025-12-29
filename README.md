@@ -20,7 +20,7 @@ http://www.zibri.org/2019/07/your-own-cors-anywhere-proxy-on.html
 This project is written in [Cloudfalre Workers](https://workers.cloudflare.com/), and can be easily deployed with [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/).
 
 ```bash
-wrangler publish
+wrangler deploy
 ```
 
 ## Usage Example
@@ -56,5 +56,5 @@ The demo accepts only fetch and xmlhttprequest.
 
 To create your own is very easy, you just need to set up a cloudflare account and upload the worker code.  
 
-My personal thanks to Damien Collis for his generous and unique donation.    
+My personal thanks to Damien Collis for his generous and unique donation.
 

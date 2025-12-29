@@ -1,3 +1,10 @@
 name = "cloudflare-cors-anywhere"
 main = "index.js"
 compatibility_date = "2023-04-17"
+
+[triggers]
+crons = []
+
+[[routes]]
+pattern = "corsproxy.cyou/*"
+custom_domain = true

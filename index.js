@@ -90,12 +90,12 @@ addEventListener("fetch", async event => {
                 }
 
                 const newRequest = new Request(event.request, {
-                    redirect: "follow",
+                    redirect: "manual",
                     headers: filteredHeaders
                 });
 
-                const response = await fetch(targetUrl, newRequest);
-                const responseHeaders = new Headers(response.headers);
+                const response = await fetch(originUrl.search.substr(1), newRequest);
+                let responseHeaders = new Headers(response.headers);
                 const exposedHeaders = [];
                 const allResponseHeaders = {};
                 for (const [key, value] of response.headers.entries()) {
@@ -108,7 +108,15 @@ addEventListener("fetch", async event => {
                 responseHeaders.set("Access-Control-Expose-Headers", exposedHeaders.join(","));
                 responseHeaders.set("cors-received-headers", JSON.stringify(allResponseHeaders));
 
-                const responseBody = isPreflightRequest ? null : await response.arrayBuffer();
+                if ([301, 302, 303, 307, 308].includes(response.status)) {
+                    const location = response.headers.get("location");
+                    if (location) {
+                        const resolvedLocation = new URL(location, originUrl.search.substr(1)).href;
+                        responseHeaders.set("Location", originUrl.origin + "/?" + resolvedLocation);
+                    }
+                }
+
+                const responseBody = isPreflightRequest ? null : response.body;
 
                 const responseInit = {
                     headers: responseHeaders,
@@ -118,7 +126,7 @@ addEventListener("fetch", async event => {
                 return new Response(responseBody, responseInit);
 
             } else {
-                const responseHeaders = new Headers();
+                let responseHeaders = new Headers();
                 responseHeaders = setupCORSHeaders(responseHeaders);
 
                 let country = false;
